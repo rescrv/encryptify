@@ -1,0 +1,28 @@
+Encryptify
+==========
+
+Encryptify encrypts and decrypts using symmetric key cryptography.  It is
+inspired by the signify[1] tool in OpenBSD, to the extent that it even borrows
+some of signify's source.
+
+[1] http://www.tedunangst.com/flak/post/signify
+
+To Install
+----------
+
+    apt-get install libbsd-dev
+    autoreconf -ivf # (only needed if compiling from git, not tarball)
+    ./configure
+    make
+    sudo make install
+
+To Update
+---------
+
+    mkdir openbsd
+    tar xzf /path/to/OpenBSD/src.tar.gz -C openbsd
+    OPENBSD_SOURCE=openbsd ./update.sh
+
+This will automatically pull in sources that were copied from the OpenBSD
+source tree and patch them as necessary.  The update script was built for 5.8
+and may need changes in the future.

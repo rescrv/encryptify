@@ -1,0 +1,114 @@
+.\" Manpage modified from signify in OpenBSD.  Relevant license text:
+.\" $OpenBSD: signify.1,v 1.31 2015/07/14 23:30:02 florian Exp $
+.\"
+.\"Copyright (c) 2013 Marc Espie <espie@openbsd.org>
+.\"Copyright (c) 2013 Ted Unangst <tedu@openbsd.org>
+.\"
+.\"Permission to use, copy, modify, and distribute this software for any
+.\"purpose with or without fee is hereby granted, provided that the above
+.\"copyright notice and this permission notice appear in all copies.
+.\"
+.\"THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\"ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\"WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\"ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\"OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.Dd $Mdocdate: November 12 2015 $
+.Dt ENCRYPTIFY 1
+.Os
+.Sh NAME
+.Nm encryptify
+.Nd encrypt and decrypt files
+.Sh SYNOPSIS
+.Nm encryptify
+.Fl G
+.Op Fl n
+.Op Fl c Ar comment
+.Fl p Ar pubkey
+.Fl s Ar seckey
+.Nm encryptify
+.Fl E
+.Fl p Ar pubkey
+.Nm encryptify
+.Fl D
+.Fl s Ar seckey
+.Sh DESCRIPTION
+The
+.Nm
+utility encrypts and decrypts files.
+The mode of operation is selected with the following options:
+.Bl -tag -width Dsssigfile
+.It Fl G
+Generate a new key pair.
+.It Fl E
+Encrypt one or more specified files.
+.It Fl D
+Decrypt one or more specified files.
+.El
+.Pp
+The other options are as follows:
+.Bl -tag -width Dsssignature
+.It Fl c Ar comment
+Specify the comment to be added during key generation.
+.It Fl n
+Do not ask for a passphrase during key generation.
+Otherwise,
+.Nm
+will prompt the user for a passphrase to protect the secret key.
+.It Fl p Ar pubkey
+Public key produced by
+.Fl G ,
+and used by
+.Fl E
+to encrypt files.
+.It Fl q
+Quiet mode.
+Suppress informational output.  Currently ignored.
+.It Fl s Ar seckey
+Secret (private) key produced by
+.Fl G ,
+and used by
+.Fl D
+to decrypt files.
+.El
+.Pp
+The key and files created by
+.Nm
+have have a line of the file that is a free form text comment that may be
+edited, so long as it does not exceed a single line.
+.\" Signature comments will be generated based on the name of the secret
+.\" key used for signing.
+.\" This comment can then be used as a hint for the name of the public key
+.\" when verifying.
+The second line of the file is the actual key base64 encoded.
+.Sh EXIT STATUS
+.Ex -std encryptify
+It may fail because of one of the following reasons:
+.Pp
+.Bl -bullet -compact
+.It
+Some necessary files do not exist.
+.It
+Entered passphrase is incorrect.
+.It
+The encrypted file was corrupted and it does not decrypt.
+.El
+.Sh EXAMPLES
+Create a new key pair:
+.Dl $ encryptify -G -p newkey.pub -s newkey.sec
+.Pp
+Encrypt stdin and write it to stdout:
+.Dl $ encryptify -E -p key.pub
+.Pp
+Encrypt a named file:
+.Dl $ encryptify -E -p key.pub file
+.Pp
+Decrypt stdin and write it to stdout:
+.Dl $ encryptify -D -s key.sec
+.Pp
+Decrypt a named file:
+.Dl $ encryptify -D -s key.sec file
+.Sh AUTHORS
+.An Robert Escriva Aq Mt robert@rescrv.net
