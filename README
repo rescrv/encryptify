@@ -7,6 +7,25 @@ some of signify's source.
 
 [1] http://www.tedunangst.com/flak/post/signify
 
+Examples
+--------
+
+Create a new key pair:
+      $ encryptify -G -p newkey.pub -s newkey.sec
+
+Encrypt stdin and write it to stdout:
+      $ encryptify -E -p key.pub
+
+Encrypt a named file:
+      $ encryptify -E -p key.pub file
+
+Decrypt stdin and write it to stdout:
+      $ encryptify -D -s key.sec
+
+Decrypt a named file:
+      $ encryptify -D -s key.sec file
+
+
 To Install
 ----------
 
