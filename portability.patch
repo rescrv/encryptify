@@ -30,24 +30,28 @@ index cde347c..405ea48 100644
  #define	MINIMUM(a,b) (((a) < (b)) ? (a) : (b))
  
 diff --git b/sha2.c a/sha2.c
-index 4842e42..53b354a 100644
+index 16486bc..6a01b87 100644
 --- b/sha2.c
 +++ a/sha2.c
-@@ -300,7 +300,7 @@ SHA224Init(SHA2_CTX *context)
+@@ -299,9 +299,7 @@ SHA224Init(SHA2_CTX *context)
+ }
+ DEF_WEAK(SHA224Init);
  
- __weak_alias(SHA224Transform, SHA256Transform);
- __weak_alias(SHA224Update, SHA256Update);
--__weak_alias(SHA224Pad, SHA256Pad);
+-MAKE_CLONE(SHA224Transform, SHA256Transform);
+-MAKE_CLONE(SHA224Update, SHA256Update);
+-MAKE_CLONE(SHA224Pad, SHA256Pad);
 +void SHA224Pad(SHA2_CTX *context) __attribute__ ((weak, alias ("SHA256Pad")));
+ DEF_WEAK(SHA224Transform);
+ DEF_WEAK(SHA224Update);
+ DEF_WEAK(SHA224Pad);
+@@ -898,9 +896,7 @@ SHA384Init(SHA2_CTX *context)
+ }
+ DEF_WEAK(SHA384Init);
  
- void
- SHA224Final(u_int8_t digest[SHA224_DIGEST_LENGTH], SHA2_CTX *context)
-@@ -884,7 +884,7 @@ SHA384Init(SHA2_CTX *context)
- 
- __weak_alias(SHA384Transform, SHA512Transform);
- __weak_alias(SHA384Update, SHA512Update);
--__weak_alias(SHA384Pad, SHA512Pad);
+-MAKE_CLONE(SHA384Transform, SHA512Transform);
+-MAKE_CLONE(SHA384Update, SHA512Update);
+-MAKE_CLONE(SHA384Pad, SHA512Pad);
 +void SHA384Pad(SHA2_CTX *context) __attribute__ ((weak, alias ("SHA512Pad")));
- 
- void
- SHA384Final(u_int8_t digest[SHA384_DIGEST_LENGTH], SHA2_CTX *context)
+ DEF_WEAK(SHA384Transform);
+ DEF_WEAK(SHA384Update);
+ DEF_WEAK(SHA384Pad);
