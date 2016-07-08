@@ -8,6 +8,8 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 AC_CONFIG_SRCDIR([encryptify.c])
 AC_CONFIG_HEADERS([config.h])
 AC_PROG_CC
+AS_IF([make -h 2>/dev/null | grep no-print-directory > /dev/null], [make_no_print=yes])
+AM_CONDITIONAL([MAKE_NO_PRINT_DIRECTORY], [test x"${make_no_print}" != x])
 AC_CHECK_FUNC([strlcpy],[BSDLIB=],[BSDLIB=-lbsd])
 AC_SUBST([BSDLIB], [$BSDLIB])
 AC_CHECK_HEADER([bsd/string.h],[AC_DEFINE([HAVE_BSD_STRING_H],[1],[Define to 1 if you have the <bsd/string.h> header file.])],,)

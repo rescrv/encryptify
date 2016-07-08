@@ -1,4 +1,6 @@
+if MAKE_NO_PRINT_DIRECTORY
 AM_MAKEFLAGS = --no-print-directory
+endif
 
 EXTRA_DIST =
 EXTRA_DIST += README
