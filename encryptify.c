@@ -418,7 +418,7 @@ encode_nonce(unsigned long long n, unsigned char nonce[SYM_NONCEBYTES])
 }
 
 static void
-encrypt(const char* keyfile, const char* plaintext, const char* ciphertext)
+encryptstream(const char* keyfile, const char* plaintext, const char* ciphertext)
 {
     struct pubkey pubkey;
     struct singlekey key;
@@ -482,7 +482,7 @@ check_digest(struct enckey* key, const unsigned char* digest, const unsigned cha
 }
 
 static void
-decrypt(const char* keyfile, const char* ciphertext, const char* plaintext)
+decryptstream(const char* keyfile, const char* ciphertext, const char* plaintext)
 {
     struct enckey enckey;
     struct singlekey key;
@@ -554,7 +554,7 @@ encryptfile(const char* keyfile, const char* plaintext)
     if ((nr = snprintf(buf, sizeof(buf), "%s.enc", plaintext)) == -1 ||
             nr >= sizeof(buf))
         errx(1, "path too long");
-    encrypt(keyfile, plaintext, buf);
+    encryptstream(keyfile, plaintext, buf);
 }
 
 static void
@@ -567,7 +567,7 @@ decryptfile(const char* keyfile, const char* ciphertext)
     if (strcmp(buf + strlen(buf) - 4, ".enc") != 0)
         errx(1, "cannot handle path %s", ciphertext);
     buf[strlen(buf) - 4] = 0;
-    decrypt(keyfile, ciphertext, buf);
+    decryptstream(keyfile, ciphertext, buf);
 }
 
 int
@@ -641,7 +641,7 @@ main(int argc, char **argv)
         if (!pubkeyfile)
             usage("must specify pubkey");
         if (argc == 0) {
-            encrypt(pubkeyfile, "-", "-");
+            encryptstream(pubkeyfile, "-", "-");
         } else {
             for (int i = 0; i < argc; ++i) {
                 encryptfile(pubkeyfile, argv[i]);
@@ -651,7 +651,7 @@ main(int argc, char **argv)
         if (!seckeyfile)
             usage("must specify seckey");
         if (argc == 0) {
-            decrypt(seckeyfile, "-", "-");
+            decryptstream(seckeyfile, "-", "-");
         } else {
             for (int i = 0; i < argc; ++i) {
                 decryptfile(seckeyfile, argv[i]);
