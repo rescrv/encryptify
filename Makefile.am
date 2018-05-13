@@ -4,6 +4,7 @@ endif
 
 EXTRA_DIST =
 EXTRA_DIST += README
+EXTRA_DIST += LICENSE
 EXTRA_DIST += update.sh
 EXTRA_DIST += portability.patch
 
