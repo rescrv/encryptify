@@ -29,29 +29,334 @@ index cde347c..405ea48 100644
  
  #define	MINIMUM(a,b) (((a) < (b)) ? (a) : (b))
  
+diff --git b/blowfish.c a/blowfish.c
+index a658e60..4550b2e 100644
+--- b/blowfish.c
++++ a/blowfish.c
+@@ -87,7 +87,6 @@ Blowfish_encipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
+ 	*xl = Xr ^ p[17];
+ 	*xr = Xl;
+ }
+-DEF_WEAK(Blowfish_encipher);
+ 
+ void
+ Blowfish_decipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
+@@ -113,7 +112,6 @@ Blowfish_decipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
+ 	*xl = Xr ^ p[0];
+ 	*xr = Xl;
+ }
+-DEF_WEAK(Blowfish_decipher);
+ 
+ void
+ Blowfish_initstate(blf_ctx *c)
+@@ -393,7 +391,6 @@ Blowfish_initstate(blf_ctx *c)
+ 
+ 	*c = initstate;
+ }
+-DEF_WEAK(Blowfish_initstate);
+ 
+ u_int32_t
+ Blowfish_stream2word(const u_int8_t *data, u_int16_t databytes,
+@@ -415,7 +412,6 @@ Blowfish_stream2word(const u_int8_t *data, u_int16_t databytes,
+ 	*current = j;
+ 	return temp;
+ }
+-DEF_WEAK(Blowfish_stream2word);
+ 
+ void
+ Blowfish_expand0state(blf_ctx *c, const u_int8_t *key, u_int16_t keybytes)
+@@ -453,7 +449,6 @@ Blowfish_expand0state(blf_ctx *c, const u_int8_t *key, u_int16_t keybytes)
+ 		}
+ 	}
+ }
+-DEF_WEAK(Blowfish_expand0state);
+ 
+ 
+ void
+@@ -498,7 +493,6 @@ Blowfish_expandstate(blf_ctx *c, const u_int8_t *data, u_int16_t databytes,
+ 	}
+ 
+ }
+-DEF_WEAK(Blowfish_expandstate);
+ 
+ void
+ blf_key(blf_ctx *c, const u_int8_t *k, u_int16_t len)
+@@ -509,7 +503,6 @@ blf_key(blf_ctx *c, const u_int8_t *k, u_int16_t len)
+ 	/* Transform S-boxes and subkeys with key */
+ 	Blowfish_expand0state(c, k, len);
+ }
+-DEF_WEAK(blf_key);
+ 
+ void
+ blf_enc(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
+@@ -523,7 +516,6 @@ blf_enc(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
+ 		d += 2;
+ 	}
+ }
+-DEF_WEAK(blf_enc);
+ 
+ void
+ blf_dec(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
+@@ -537,7 +529,6 @@ blf_dec(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
+ 		d += 2;
+ 	}
+ }
+-DEF_WEAK(blf_dec);
+ 
+ void
+ blf_ecb_encrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
+@@ -560,7 +551,6 @@ blf_ecb_encrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
+ 		data += 8;
+ 	}
+ }
+-DEF_WEAK(blf_ecb_encrypt);
+ 
+ void
+ blf_ecb_decrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
+@@ -583,7 +573,6 @@ blf_ecb_decrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
+ 		data += 8;
+ 	}
+ }
+-DEF_WEAK(blf_ecb_decrypt);
+ 
+ void
+ blf_cbc_encrypt(blf_ctx *c, u_int8_t *iv, u_int8_t *data, u_int32_t len)
+@@ -609,7 +598,6 @@ blf_cbc_encrypt(blf_ctx *c, u_int8_t *iv, u_int8_t *data, u_int32_t len)
+ 		data += 8;
+ 	}
+ }
+-DEF_WEAK(blf_cbc_encrypt);
+ 
+ void
+ blf_cbc_decrypt(blf_ctx *c, u_int8_t *iva, u_int8_t *data, u_int32_t len)
+@@ -651,7 +639,6 @@ blf_cbc_decrypt(blf_ctx *c, u_int8_t *iva, u_int8_t *data, u_int32_t len)
+ 	for (j = 0; j < 8; j++)
+ 		data[j] ^= iva[j];
+ }
+-DEF_WEAK(blf_cbc_decrypt);
+ 
+ #if 0
+ void
+diff --git b/explicit_bzero.c a/explicit_bzero.c
+index 003ea7c..5dd0103 100644
+--- b/explicit_bzero.c
++++ a/explicit_bzero.c
+@@ -17,4 +17,3 @@ explicit_bzero(void *buf, size_t len)
+ 	memset(buf, 0, len);
+ 	__explicit_bzero_hook(buf, len);
+ }
+-DEF_WEAK(explicit_bzero);
 diff --git b/sha2.c a/sha2.c
-index 16486bc..6a01b87 100644
+index 80fa50a..9101b01 100644
 --- b/sha2.c
 +++ a/sha2.c
-@@ -299,9 +299,7 @@ SHA224Init(SHA2_CTX *context)
+@@ -309,14 +309,8 @@ SHA224Init(SHA2_CTX *context)
+ 	memset(context->buffer, 0, sizeof(context->buffer));
+ 	context->bitcount[0] = 0;
  }
- DEF_WEAK(SHA224Init);
+-DEF_WEAK(SHA224Init);
  
 -MAKE_CLONE(SHA224Transform, SHA256Transform);
 -MAKE_CLONE(SHA224Update, SHA256Update);
 -MAKE_CLONE(SHA224Pad, SHA256Pad);
+-DEF_WEAK(SHA224Transform);
+-DEF_WEAK(SHA224Update);
+-DEF_WEAK(SHA224Pad);
 +void SHA224Pad(SHA2_CTX *context) __attribute__ ((weak, alias ("SHA256Pad")));
- DEF_WEAK(SHA224Transform);
- DEF_WEAK(SHA224Update);
- DEF_WEAK(SHA224Pad);
-@@ -898,9 +896,7 @@ SHA384Init(SHA2_CTX *context)
+ 
+ void
+ SHA224Final(u_int8_t digest[SHA224_DIGEST_LENGTH], SHA2_CTX *context)
+@@ -334,7 +328,6 @@ SHA224Final(u_int8_t digest[SHA224_DIGEST_LENGTH], SHA2_CTX *context)
+ #endif
+ 	explicit_bzero(context, sizeof(*context));
  }
- DEF_WEAK(SHA384Init);
+-DEF_WEAK(SHA224Final);
+ #endif /* !defined(SHA2_SMALL) */
+ 
+ /*** SHA-256: *********************************************************/
+@@ -346,7 +339,6 @@ SHA256Init(SHA2_CTX *context)
+ 	memset(context->buffer, 0, sizeof(context->buffer));
+ 	context->bitcount[0] = 0;
+ }
+-DEF_WEAK(SHA256Init);
+ 
+ #ifdef SHA2_UNROLL_TRANSFORM
+ 
+@@ -505,7 +497,6 @@ SHA256Transform(u_int32_t state[8], const u_int8_t data[SHA256_BLOCK_LENGTH])
+ }
+ 
+ #endif /* SHA2_UNROLL_TRANSFORM */
+-DEF_WEAK(SHA256Transform);
+ 
+ void
+ SHA256Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
+@@ -552,7 +543,6 @@ SHA256Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
+ 	/* Clean up: */
+ 	usedspace = freespace = 0;
+ }
+-DEF_WEAK(SHA256Update);
+ 
+ void
+ SHA256Pad(SHA2_CTX *context)
+@@ -596,7 +586,6 @@ SHA256Pad(SHA2_CTX *context)
+ 	/* Clean up: */
+ 	usedspace = 0;
+ }
+-DEF_WEAK(SHA256Pad);
+ 
+ void
+ SHA256Final(u_int8_t digest[SHA256_DIGEST_LENGTH], SHA2_CTX *context)
+@@ -614,7 +603,6 @@ SHA256Final(u_int8_t digest[SHA256_DIGEST_LENGTH], SHA2_CTX *context)
+ #endif
+ 	explicit_bzero(context, sizeof(*context));
+ }
+-DEF_WEAK(SHA256Final);
+ 
+ 
+ /*** SHA-512: *********************************************************/
+@@ -626,7 +614,6 @@ SHA512Init(SHA2_CTX *context)
+ 	memset(context->buffer, 0, sizeof(context->buffer));
+ 	context->bitcount[0] = context->bitcount[1] =  0;
+ }
+-DEF_WEAK(SHA512Init);
+ 
+ #ifdef SHA2_UNROLL_TRANSFORM
+ 
+@@ -786,7 +773,6 @@ SHA512Transform(u_int64_t state[8], const u_int8_t data[SHA512_BLOCK_LENGTH])
+ }
+ 
+ #endif /* SHA2_UNROLL_TRANSFORM */
+-DEF_WEAK(SHA512Transform);
+ 
+ void
+ SHA512Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
+@@ -833,7 +819,6 @@ SHA512Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
+ 	/* Clean up: */
+ 	usedspace = freespace = 0;
+ }
+-DEF_WEAK(SHA512Update);
+ 
+ void
+ SHA512Pad(SHA2_CTX *context)
+@@ -877,7 +862,6 @@ SHA512Pad(SHA2_CTX *context)
+ 	/* Clean up: */
+ 	usedspace = 0;
+ }
+-DEF_WEAK(SHA512Pad);
+ 
+ void
+ SHA512Final(u_int8_t digest[SHA512_DIGEST_LENGTH], SHA2_CTX *context)
+@@ -895,7 +879,6 @@ SHA512Final(u_int8_t digest[SHA512_DIGEST_LENGTH], SHA2_CTX *context)
+ #endif
+ 	explicit_bzero(context, sizeof(*context));
+ }
+-DEF_WEAK(SHA512Final);
+ 
+ #if !defined(SHA2_SMALL)
+ 
+@@ -908,14 +891,8 @@ SHA384Init(SHA2_CTX *context)
+ 	memset(context->buffer, 0, sizeof(context->buffer));
+ 	context->bitcount[0] = context->bitcount[1] = 0;
+ }
+-DEF_WEAK(SHA384Init);
  
 -MAKE_CLONE(SHA384Transform, SHA512Transform);
 -MAKE_CLONE(SHA384Update, SHA512Update);
 -MAKE_CLONE(SHA384Pad, SHA512Pad);
+-DEF_WEAK(SHA384Transform);
+-DEF_WEAK(SHA384Update);
+-DEF_WEAK(SHA384Pad);
 +void SHA384Pad(SHA2_CTX *context) __attribute__ ((weak, alias ("SHA512Pad")));
- DEF_WEAK(SHA384Transform);
- DEF_WEAK(SHA384Update);
- DEF_WEAK(SHA384Pad);
+ 
+ void
+ SHA384Final(u_int8_t digest[SHA384_DIGEST_LENGTH], SHA2_CTX *context)
+@@ -934,42 +911,4 @@ SHA384Final(u_int8_t digest[SHA384_DIGEST_LENGTH], SHA2_CTX *context)
+ 	/* Zero out state data */
+ 	explicit_bzero(context, sizeof(*context));
+ }
+-DEF_WEAK(SHA384Final);
+-
+-/*** SHA-512/256: *********************************************************/
+-void
+-SHA512_256Init(SHA2_CTX *context)
+-{
+-	memcpy(context->state.st64, sha512_256_initial_hash_value,
+-	    sizeof(sha512_256_initial_hash_value));
+-	memset(context->buffer, 0, sizeof(context->buffer));
+-	context->bitcount[0] = context->bitcount[1] = 0;
+-}
+-DEF_WEAK(SHA512_256Init);
+-
+-MAKE_CLONE(SHA512_256Transform, SHA512Transform);
+-MAKE_CLONE(SHA512_256Update, SHA512Update);
+-MAKE_CLONE(SHA512_256Pad, SHA512Pad);
+-DEF_WEAK(SHA512_256Transform);
+-DEF_WEAK(SHA512_256Update);
+-DEF_WEAK(SHA512_256Pad);
+-
+-void
+-SHA512_256Final(u_int8_t digest[SHA512_256_DIGEST_LENGTH], SHA2_CTX *context)
+-{
+-	SHA512_256Pad(context);
+-
+-#if BYTE_ORDER == LITTLE_ENDIAN
+-	int	i;
+-
+-	/* Convert TO host byte order */
+-	for (i = 0; i < 4; i++)
+-		BE_64_TO_8(digest + i * 8, context->state.st64[i]);
+-#else
+-	memcpy(digest, context->state.st64, SHA512_256_DIGEST_LENGTH);
+-#endif
+-	/* Zero out state data */
+-	explicit_bzero(context, sizeof(*context));
+-}
+-DEF_WEAK(SHA512_256Final);
+ #endif /* !defined(SHA2_SMALL) */
+diff --git b/sha2.h a/sha2.h
+index 52ddb3f..b3140b5 100644
+--- b/sha2.h
++++ a/sha2.h
+@@ -51,9 +51,6 @@
+ #define SHA512_BLOCK_LENGTH		128
+ #define SHA512_DIGEST_LENGTH		64
+ #define SHA512_DIGEST_STRING_LENGTH	(SHA512_DIGEST_LENGTH * 2 + 1)
+-#define SHA512_256_BLOCK_LENGTH		128
+-#define SHA512_256_DIGEST_LENGTH	32
+-#define SHA512_256_DIGEST_STRING_LENGTH	(SHA512_256_DIGEST_LENGTH * 2 + 1)
+ 
+ 
+ /*** SHA-224/256/384/512 Context Structure *******************************/
+@@ -134,23 +131,6 @@ char *SHA512FileChunk(const char *, char *, off_t, off_t)
+ char *SHA512Data(const u_int8_t *, size_t, char *)
+ 	__attribute__((__bounded__(__string__,1,2)))
+ 	__attribute__((__bounded__(__minbytes__,3,SHA512_DIGEST_STRING_LENGTH)));
+-
+-void SHA512_256Init(SHA2_CTX *);
+-void SHA512_256Transform(u_int64_t state[8], const u_int8_t [SHA512_256_BLOCK_LENGTH]);
+-void SHA512_256Update(SHA2_CTX *, const u_int8_t *, size_t)
+-	__attribute__((__bounded__(__string__,2,3)));
+-void SHA512_256Pad(SHA2_CTX *);
+-void SHA512_256Final(u_int8_t [SHA512_256_DIGEST_LENGTH], SHA2_CTX *)
+-	__attribute__((__bounded__(__minbytes__,1,SHA512_256_DIGEST_LENGTH)));
+-char *SHA512_256End(SHA2_CTX *, char *)
+-	__attribute__((__bounded__(__minbytes__,2,SHA512_256_DIGEST_STRING_LENGTH)));
+-char *SHA512_256File(const char *, char *)
+-	__attribute__((__bounded__(__minbytes__,2,SHA512_256_DIGEST_STRING_LENGTH)));
+-char *SHA512_256FileChunk(const char *, char *, off_t, off_t)
+-	__attribute__((__bounded__(__minbytes__,2,SHA512_256_DIGEST_STRING_LENGTH)));
+-char *SHA512_256Data(const u_int8_t *, size_t, char *)
+-	__attribute__((__bounded__(__string__,1,2)))
+-	__attribute__((__bounded__(__minbytes__,3,SHA512_256_DIGEST_STRING_LENGTH)));
+ __END_DECLS
+ 
+ #endif /* _SHA2_H */
+diff --git b/timingsafe_bcmp.c a/timingsafe_bcmp.c
+index 0409ec3..552e844 100644
+--- b/timingsafe_bcmp.c
++++ a/timingsafe_bcmp.c
+@@ -27,4 +27,3 @@ timingsafe_bcmp(const void *b1, const void *b2, size_t n)
+ 		ret |= *p1++ ^ *p2++;
+ 	return (ret != 0);
+ }
+-DEF_WEAK(timingsafe_bcmp);

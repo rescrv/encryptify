@@ -1,4 +1,4 @@
-/*	$OpenBSD: sha2.c,v 1.24 2015/09/11 09:18:27 guenther Exp $	*/
+/*	$OpenBSD: sha2.c,v 1.26 2017/05/27 15:32:51 naddy Exp $	*/
 
 /*
  * FILE:	sha2.c
@@ -195,18 +195,6 @@ static const u_int32_t K256[64] = {
 	0x90befffaUL, 0xa4506cebUL, 0xbef9a3f7UL, 0xc67178f2UL
 };
 
-/* Initial hash value H for SHA-224: */
-static const u_int32_t sha224_initial_hash_value[8] = {
-	0xc1059ed8UL,
-	0x367cd507UL,
-	0x3070dd17UL,
-	0xf70e5939UL,
-	0xffc00b31UL,
-	0x68581511UL,
-	0x64f98fa7UL,
-	0xbefa4fa4UL
-};
-
 /* Initial hash value H for SHA-256: */
 static const u_int32_t sha256_initial_hash_value[8] = {
 	0x6a09e667UL,
@@ -276,6 +264,18 @@ static const u_int64_t sha512_initial_hash_value[8] = {
 };
 
 #if !defined(SHA2_SMALL)
+/* Initial hash value H for SHA-224: */
+static const u_int32_t sha224_initial_hash_value[8] = {
+	0xc1059ed8UL,
+	0x367cd507UL,
+	0x3070dd17UL,
+	0xf70e5939UL,
+	0xffc00b31UL,
+	0x68581511UL,
+	0x64f98fa7UL,
+	0xbefa4fa4UL
+};
+
 /* Initial hash value H for SHA-384 */
 static const u_int64_t sha384_initial_hash_value[8] = {
 	0xcbbb9d5dc1059ed8ULL,
@@ -288,6 +288,18 @@ static const u_int64_t sha384_initial_hash_value[8] = {
 	0x47b5481dbefa4fa4ULL
 };
 
+/* Initial hash value H for SHA-512-256 */
+static const u_int64_t sha512_256_initial_hash_value[8] = {
+	0x22312194fc2bf72cULL,
+	0x9f555fa3c84c64c2ULL,
+	0x2393b86b6f53b151ULL,
+	0x963877195940eabdULL,
+	0x96283ee2a88effe3ULL,
+	0xbe5e1e2553863992ULL,
+	0x2b0199fc2c85b8aaULL,
+	0x0eb72ddc81c52ca2ULL
+};
+
 /*** SHA-224: *********************************************************/
 void
 SHA224Init(SHA2_CTX *context)
@@ -297,12 +309,8 @@ SHA224Init(SHA2_CTX *context)
 	memset(context->buffer, 0, sizeof(context->buffer));
 	context->bitcount[0] = 0;
 }
-DEF_WEAK(SHA224Init);
 
 void SHA224Pad(SHA2_CTX *context) __attribute__ ((weak, alias ("SHA256Pad")));
-DEF_WEAK(SHA224Transform);
-DEF_WEAK(SHA224Update);
-DEF_WEAK(SHA224Pad);
 
 void
 SHA224Final(u_int8_t digest[SHA224_DIGEST_LENGTH], SHA2_CTX *context)
@@ -320,7 +328,6 @@ SHA224Final(u_int8_t digest[SHA224_DIGEST_LENGTH], SHA2_CTX *context)
 #endif
 	explicit_bzero(context, sizeof(*context));
 }
-DEF_WEAK(SHA224Final);
 #endif /* !defined(SHA2_SMALL) */
 
 /*** SHA-256: *********************************************************/
@@ -332,7 +339,6 @@ SHA256Init(SHA2_CTX *context)
 	memset(context->buffer, 0, sizeof(context->buffer));
 	context->bitcount[0] = 0;
 }
-DEF_WEAK(SHA256Init);
 
 #ifdef SHA2_UNROLL_TRANSFORM
 
@@ -491,7 +497,6 @@ SHA256Transform(u_int32_t state[8], const u_int8_t data[SHA256_BLOCK_LENGTH])
 }
 
 #endif /* SHA2_UNROLL_TRANSFORM */
-DEF_WEAK(SHA256Transform);
 
 void
 SHA256Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
@@ -538,7 +543,6 @@ SHA256Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
 	/* Clean up: */
 	usedspace = freespace = 0;
 }
-DEF_WEAK(SHA256Update);
 
 void
 SHA256Pad(SHA2_CTX *context)
@@ -582,7 +586,6 @@ SHA256Pad(SHA2_CTX *context)
 	/* Clean up: */
 	usedspace = 0;
 }
-DEF_WEAK(SHA256Pad);
 
 void
 SHA256Final(u_int8_t digest[SHA256_DIGEST_LENGTH], SHA2_CTX *context)
@@ -600,7 +603,6 @@ SHA256Final(u_int8_t digest[SHA256_DIGEST_LENGTH], SHA2_CTX *context)
 #endif
 	explicit_bzero(context, sizeof(*context));
 }
-DEF_WEAK(SHA256Final);
 
 
 /*** SHA-512: *********************************************************/
@@ -612,7 +614,6 @@ SHA512Init(SHA2_CTX *context)
 	memset(context->buffer, 0, sizeof(context->buffer));
 	context->bitcount[0] = context->bitcount[1] =  0;
 }
-DEF_WEAK(SHA512Init);
 
 #ifdef SHA2_UNROLL_TRANSFORM
 
@@ -772,7 +773,6 @@ SHA512Transform(u_int64_t state[8], const u_int8_t data[SHA512_BLOCK_LENGTH])
 }
 
 #endif /* SHA2_UNROLL_TRANSFORM */
-DEF_WEAK(SHA512Transform);
 
 void
 SHA512Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
@@ -819,7 +819,6 @@ SHA512Update(SHA2_CTX *context, const u_int8_t *data, size_t len)
 	/* Clean up: */
 	usedspace = freespace = 0;
 }
-DEF_WEAK(SHA512Update);
 
 void
 SHA512Pad(SHA2_CTX *context)
@@ -863,7 +862,6 @@ SHA512Pad(SHA2_CTX *context)
 	/* Clean up: */
 	usedspace = 0;
 }
-DEF_WEAK(SHA512Pad);
 
 void
 SHA512Final(u_int8_t digest[SHA512_DIGEST_LENGTH], SHA2_CTX *context)
@@ -881,7 +879,6 @@ SHA512Final(u_int8_t digest[SHA512_DIGEST_LENGTH], SHA2_CTX *context)
 #endif
 	explicit_bzero(context, sizeof(*context));
 }
-DEF_WEAK(SHA512Final);
 
 #if !defined(SHA2_SMALL)
 
@@ -894,12 +891,8 @@ SHA384Init(SHA2_CTX *context)
 	memset(context->buffer, 0, sizeof(context->buffer));
 	context->bitcount[0] = context->bitcount[1] = 0;
 }
-DEF_WEAK(SHA384Init);
 
 void SHA384Pad(SHA2_CTX *context) __attribute__ ((weak, alias ("SHA512Pad")));
-DEF_WEAK(SHA384Transform);
-DEF_WEAK(SHA384Update);
-DEF_WEAK(SHA384Pad);
 
 void
 SHA384Final(u_int8_t digest[SHA384_DIGEST_LENGTH], SHA2_CTX *context)
@@ -918,5 +911,4 @@ SHA384Final(u_int8_t digest[SHA384_DIGEST_LENGTH], SHA2_CTX *context)
 	/* Zero out state data */
 	explicit_bzero(context, sizeof(*context));
 }
-DEF_WEAK(SHA384Final);
 #endif /* !defined(SHA2_SMALL) */
