@@ -1,4 +1,4 @@
-/*	$OpenBSD: sha2.h,v 1.9 2013/04/15 15:54:17 millert Exp $	*/
+/*	$OpenBSD: sha2.h,v 1.10 2016/09/03 17:00:29 tedu Exp $	*/
 
 /*
  * FILE:	sha2.h
