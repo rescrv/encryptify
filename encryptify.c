@@ -16,24 +16,40 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <assert.h>
+#include "config.h"
+
 #include <sys/stat.h>
 
 #include <netinet/in.h>
 #include <resolv.h>
 
+#include <assert.h>
 #include <limits.h>
 #include <stdint.h>
 #include <fcntl.h>
 #include <string.h>
+#if HAVE_BSD_STRING_H
 #include <bsd/string.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <err.h>
 #include <unistd.h>
+#if HAVE_READPASSPHRASE_H
+#include <readpassphrase.h>
+#elif HAVE_BSD_READPASSPHRASE_H
 #include <bsd/readpassphrase.h>
+#else
+#error portability problem
+#endif
+#if HAVE_LIBUTIL_H
+#include <libutil.h>
+#elif HAVE_BSD_LIBUTIL_H
 #include <bsd/libutil.h>
+#else
+#error portability problem
+#endif
 #include <sha2.h>
 
 #include "tweetnacl.h"

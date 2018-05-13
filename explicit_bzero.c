@@ -17,4 +17,3 @@ explicit_bzero(void *buf, size_t len)
 	memset(buf, 0, len);
 	__explicit_bzero_hook(buf, len);
 }
-DEF_WEAK(explicit_bzero);

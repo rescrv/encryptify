@@ -87,7 +87,6 @@ Blowfish_encipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
 	*xl = Xr ^ p[17];
 	*xr = Xl;
 }
-DEF_WEAK(Blowfish_encipher);
 
 void
 Blowfish_decipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
@@ -113,7 +112,6 @@ Blowfish_decipher(blf_ctx *c, u_int32_t *xl, u_int32_t *xr)
 	*xl = Xr ^ p[0];
 	*xr = Xl;
 }
-DEF_WEAK(Blowfish_decipher);
 
 void
 Blowfish_initstate(blf_ctx *c)
@@ -393,7 +391,6 @@ Blowfish_initstate(blf_ctx *c)
 
 	*c = initstate;
 }
-DEF_WEAK(Blowfish_initstate);
 
 u_int32_t
 Blowfish_stream2word(const u_int8_t *data, u_int16_t databytes,
@@ -415,7 +412,6 @@ Blowfish_stream2word(const u_int8_t *data, u_int16_t databytes,
 	*current = j;
 	return temp;
 }
-DEF_WEAK(Blowfish_stream2word);
 
 void
 Blowfish_expand0state(blf_ctx *c, const u_int8_t *key, u_int16_t keybytes)
@@ -453,7 +449,6 @@ Blowfish_expand0state(blf_ctx *c, const u_int8_t *key, u_int16_t keybytes)
 		}
 	}
 }
-DEF_WEAK(Blowfish_expand0state);
 
 
 void
@@ -498,7 +493,6 @@ Blowfish_expandstate(blf_ctx *c, const u_int8_t *data, u_int16_t databytes,
 	}
 
 }
-DEF_WEAK(Blowfish_expandstate);
 
 void
 blf_key(blf_ctx *c, const u_int8_t *k, u_int16_t len)
@@ -509,7 +503,6 @@ blf_key(blf_ctx *c, const u_int8_t *k, u_int16_t len)
 	/* Transform S-boxes and subkeys with key */
 	Blowfish_expand0state(c, k, len);
 }
-DEF_WEAK(blf_key);
 
 void
 blf_enc(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
@@ -523,7 +516,6 @@ blf_enc(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
 		d += 2;
 	}
 }
-DEF_WEAK(blf_enc);
 
 void
 blf_dec(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
@@ -537,7 +529,6 @@ blf_dec(blf_ctx *c, u_int32_t *data, u_int16_t blocks)
 		d += 2;
 	}
 }
-DEF_WEAK(blf_dec);
 
 void
 blf_ecb_encrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
@@ -560,7 +551,6 @@ blf_ecb_encrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
 		data += 8;
 	}
 }
-DEF_WEAK(blf_ecb_encrypt);
 
 void
 blf_ecb_decrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
@@ -583,7 +573,6 @@ blf_ecb_decrypt(blf_ctx *c, u_int8_t *data, u_int32_t len)
 		data += 8;
 	}
 }
-DEF_WEAK(blf_ecb_decrypt);
 
 void
 blf_cbc_encrypt(blf_ctx *c, u_int8_t *iv, u_int8_t *data, u_int32_t len)
@@ -609,7 +598,6 @@ blf_cbc_encrypt(blf_ctx *c, u_int8_t *iv, u_int8_t *data, u_int32_t len)
 		data += 8;
 	}
 }
-DEF_WEAK(blf_cbc_encrypt);
 
 void
 blf_cbc_decrypt(blf_ctx *c, u_int8_t *iva, u_int8_t *data, u_int32_t len)
@@ -651,7 +639,6 @@ blf_cbc_decrypt(blf_ctx *c, u_int8_t *iva, u_int8_t *data, u_int32_t len)
 	for (j = 0; j < 8; j++)
 		data[j] ^= iva[j];
 }
-DEF_WEAK(blf_cbc_decrypt);
 
 #if 0
 void
